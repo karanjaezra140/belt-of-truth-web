@@ -131,32 +131,53 @@ export async function getEbookPageCache(
 // freshness reason as the ebook-access checks above — an admin who just
 // received a donation or submission expects to see it immediately, not
 // after the CDN's cache window. Requires SANITY_API_TOKEN to be set.
+//
+// Each is wrapped in try/catch: a misconfigured or under-permissioned token
+// should degrade the dashboard to "no data yet" for that section, not crash
+// the whole page — this is the one place admins actually look when
+// something's wrong, so it needs to stay renderable even when Sanity itself
+// is unhappy.
 
 export async function getContactSubmissions(): Promise<SanityContactSubmission[]> {
   if (!sanityWriteClient) return [];
-  return sanityWriteClient.fetch<SanityContactSubmission[]>(
-    groq`*[_type == "contactSubmission"] | order(submittedAt desc) {
-      _id, name, email, phone, interest, message, submittedAt
-    }`
-  );
+  try {
+    return await sanityWriteClient.fetch<SanityContactSubmission[]>(
+      groq`*[_type == "contactSubmission"] | order(submittedAt desc) {
+        _id, name, email, phone, interest, message, submittedAt
+      }`
+    );
+  } catch (err) {
+    console.error("Failed to fetch contact submissions:", err);
+    return [];
+  }
 }
 
 export async function getDonations(): Promise<SanityDonation[]> {
   if (!sanityWriteClient) return [];
-  return sanityWriteClient.fetch<SanityDonation[]>(
-    groq`*[_type == "donation"] | order(paidAt desc) {
-      _id, reference, donorName, donorEmail, amountKes, kind, bookTitle, paidAt
-    }`
-  );
+  try {
+    return await sanityWriteClient.fetch<SanityDonation[]>(
+      groq`*[_type == "donation"] | order(paidAt desc) {
+        _id, reference, donorName, donorEmail, amountKes, kind, bookTitle, paidAt
+      }`
+    );
+  } catch (err) {
+    console.error("Failed to fetch donations:", err);
+    return [];
+  }
 }
 
 export async function getAllEbookAccess(): Promise<SanityEbookAccess[]> {
   if (!sanityWriteClient) return [];
-  return sanityWriteClient.fetch<SanityEbookAccess[]>(
-    groq`*[_type == "ebookAccess"] | order(createdAt desc) {
-      _id, "book": book->{_id, "slug": slug.current, title}, buyerEmail, tokenHash, reference, expiresAt, revoked, createdAt
-    }`
-  );
+  try {
+    return await sanityWriteClient.fetch<SanityEbookAccess[]>(
+      groq`*[_type == "ebookAccess"] | order(createdAt desc) {
+        _id, "book": book->{_id, "slug": slug.current, title}, buyerEmail, tokenHash, reference, expiresAt, revoked, createdAt
+      }`
+    );
+  } catch (err) {
+    console.error("Failed to fetch ebook access records:", err);
+    return [];
+  }
 }
 
 export async function getSiteSettings(): Promise<SanitySiteSettings> {
