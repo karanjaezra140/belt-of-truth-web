@@ -146,6 +146,67 @@ export const FREE_RESOURCES = [
   },
 ] as const;
 
+export const MISSION_VISION_POINTS = [
+  "Walk alongside young people through mentorship, discipleship, and honest accountability.",
+  "Partner with schools, churches, and communities to reach youth where they already are.",
+  "Root every program in biblical truth, from purity to purpose to habit transformation.",
+] as const;
+
+export const MISSION_STATEMENT =
+  "To raise a generation of young people who know the truth, live it out with integrity, and walk confidently in their God-given purpose — free from the destructive habits that hold so many back.";
+
+export const VISION_STATEMENT =
+  "A generation across Kenya's schools, churches, and communities equipped with the Belt of Truth — grounded, purposeful, and transformed from the inside out, as inspired by Ephesians 6:14.";
+
+export const HOW_IT_WORKS_STEPS = [
+  {
+    step: "1",
+    title: "Reach Out",
+    description:
+      "Get in touch through the contact form — as a student, parent, school, or church wanting to partner with us.",
+  },
+  {
+    step: "2",
+    title: "Join a Program",
+    description:
+      "We connect you to the right program: school missions, church mentorship, or one-on-one discipleship.",
+  },
+  {
+    step: "3",
+    title: "Walk the Journey",
+    description:
+      "Grow through ongoing mentorship and accountability, built for lasting transformation, not a one-time talk.",
+  },
+] as const;
+
+export const FAQS = [
+  {
+    question: "How do I get one of the books?",
+    answer:
+      "Purchase it on the Resources page through our secure Paystack checkout — cards, M-Pesa, and bank transfer are all supported.",
+  },
+  {
+    question: "Can I download the ebook as a PDF?",
+    answer:
+      "No — books are read on-site in our protected reader to keep them from being copied and redistributed. After purchase, you'll get an email with a personal link to read the book online.",
+  },
+  {
+    question: "Can I read my book without an internet connection?",
+    answer:
+      "Yes. Open the book online once, then use the \"Save for Offline\" button in the reader — the pages you save stay readable without a connection, even in airplane mode.",
+  },
+  {
+    question: "Can I read on more than one device?",
+    answer:
+      "Yes, your access link works on any of your own devices. Each page you read carries your email address, so please don't share your access link with others.",
+  },
+  {
+    question: "I didn't get my access email — what do I do?",
+    answer:
+      "Check your spam folder first, then reach out through the Contact page with your payment reference and we'll sort it out.",
+  },
+] as const;
+
 export const FOUNDER = {
   name: "M.D Njuguna",
   photo: "/images/founder.jpeg",

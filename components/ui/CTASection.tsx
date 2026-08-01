@@ -7,6 +7,8 @@ type CTASectionProps = {
   description: string;
   buttonLabel: string;
   buttonHref: string;
+  secondaryLabel?: string;
+  secondaryHref?: string;
 };
 
 export function CTASection({
@@ -14,6 +16,8 @@ export function CTASection({
   description,
   buttonLabel,
   buttonHref,
+  secondaryLabel,
+  secondaryHref,
 }: CTASectionProps) {
   return (
     <div className="px-5 py-12 md:py-16">
@@ -22,9 +26,14 @@ export function CTASection({
       >
         <h2 className="font-display text-3xl font-bold">{title}</h2>
         <p className="mx-auto mt-3 max-w-xl text-white/85">{description}</p>
-        <Button href={buttonHref} className="mt-6">
-          {buttonLabel} →
-        </Button>
+        <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
+          <Button href={buttonHref}>{buttonLabel} →</Button>
+          {secondaryLabel && secondaryHref && (
+            <Button href={secondaryHref} variant="outline">
+              {secondaryLabel}
+            </Button>
+          )}
+        </div>
       </AnimatedSection>
     </div>
   );

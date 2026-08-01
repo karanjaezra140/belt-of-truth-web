@@ -1,0 +1,17 @@
+{
+  "name": "Belt of Truth Mentorship",
+  "short_name": "Belt of Truth",
+  "description": "Equipping a generation with truth — mentorship, programs, and resources from Belt of Truth Mentorship.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#050e1f",
+  "theme_color": "#0b3d91",
+  "icons": [
+    {
+      "src": "/icon.png",
+      "sizes": "500x500",
+      "type": "image/png",
+      "purpose": "any"
+    }
+  ]
+}

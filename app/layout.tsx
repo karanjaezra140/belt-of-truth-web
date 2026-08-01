@@ -19,6 +19,7 @@ const dmSans = DM_Sans({
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  manifest: "/manifest.json",
   title: {
     default: `${SITE_NAME} — Raising a Generation Rooted in Truth`,
     template: `%s | ${SITE_NAME}`,

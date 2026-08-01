@@ -5,7 +5,8 @@ import { IconCard } from "@/components/ui/IconCard";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { CTASection } from "@/components/ui/CTASection";
 import { BookCard } from "@/components/BookCard";
-import { FREE_RESOURCES } from "@/lib/site-config";
+import { HiChevronDown } from "react-icons/hi";
+import { FREE_RESOURCES, FAQS } from "@/lib/site-config";
 import { getBooks } from "@/lib/sanity/queries";
 import { isSanityConfigured } from "@/lib/sanity/client";
 
@@ -63,6 +64,24 @@ export default async function ResourcesPage() {
               </p>
             )}
           </div>
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection className="mx-auto max-w-3xl px-5 py-16">
+        <SectionHeading eyebrow="good to know." title="Frequently Asked Questions" />
+        <div className="mt-8 space-y-3">
+          {FAQS.map((faq) => (
+            <details
+              key={faq.question}
+              className="group rounded-xl bg-white p-5 shadow-[0_3px_12px_rgba(0,0,0,0.07)] [&_summary::-webkit-details-marker]:hidden"
+            >
+              <summary className="flex cursor-pointer list-none items-center justify-between gap-4 text-[15px] font-semibold text-navy-800">
+                {faq.question}
+                <HiChevronDown className="shrink-0 text-lg text-gold-600 transition-transform duration-200 group-open:rotate-180" />
+              </summary>
+              <p className="mt-3 text-[15px] leading-relaxed text-gray-600">{faq.answer}</p>
+            </details>
+          ))}
         </div>
       </AnimatedSection>
 
