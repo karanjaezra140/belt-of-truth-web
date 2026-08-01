@@ -3,6 +3,7 @@ import { cookies } from "next/headers";
 import { getBookBySlug, getEbookAccessById, getEbookPageCache } from "@/lib/sanity/queries";
 import { sanityWriteClient } from "@/lib/sanity/client";
 import { ebookCookieName, isEbookAccessLive, verifySession } from "@/lib/ebook-session";
+import { ADMIN_COOKIE_NAME, verifyAdminSession } from "@/lib/admin-session";
 import { renderPdfPageToPng, watermarkPng } from "@/lib/ebook-render";
 
 // PDF rasterization uses native bindings (@napi-rs/canvas, sharp) — must run
@@ -36,14 +37,24 @@ export async function GET(request: Request, { params }: Props) {
 
   const cookieStore = await cookies();
   const session = verifySession(cookieStore.get(ebookCookieName(book._id))?.value);
-  if (!session || session.bookId !== book._id) {
-    return NextResponse.json({ error: "Access denied" }, { status: 403 });
+
+  let access: { buyerEmail: string; createdAt?: string } | null = null;
+
+  if (session && session.bookId === book._id) {
+    const realAccess = await getEbookAccessById(session.accessId);
+    if (realAccess && realAccess.book._id === book._id && isEbookAccessLive(realAccess)) {
+      access = realAccess;
+    }
   }
 
-  const access = await getEbookAccessById(session.accessId);
-  const isValid = access && access.book._id === book._id && isEbookAccessLive(access);
+  // Admins can preview any book's reader without a purchase — mirrors the
+  // same bypass in app/read/[slug]/page.tsx, checked independently here
+  // since this route (not the page) is what actually serves page images.
+  if (!access && verifyAdminSession(cookieStore.get(ADMIN_COOKIE_NAME)?.value)) {
+    access = { buyerEmail: "Admin Preview" };
+  }
 
-  if (!isValid || !access) {
+  if (!access) {
     return NextResponse.json({ error: "Access denied" }, { status: 403 });
   }
 

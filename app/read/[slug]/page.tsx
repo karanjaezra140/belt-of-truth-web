@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { EbookReader } from "@/components/EbookReader";
 import { getBookBySlug, getEbookAccessById } from "@/lib/sanity/queries";
 import { ebookCookieName, isEbookAccessLive, maskEmail, verifySession } from "@/lib/ebook-session";
+import { ADMIN_COOKIE_NAME, verifyAdminSession } from "@/lib/admin-session";
 
 export const metadata: Metadata = {
   title: "Read Online",
@@ -35,6 +36,22 @@ export default async function ReadBookPage({ params }: Props) {
     isEbookAccessLive(access);
 
   if (!isValid || !access) {
+    // Admins can preview any book's reader without a purchase — the page
+    // -image route re-checks this same admin session independently, so this
+    // isn't just a client-visible gate.
+    const isAdmin = verifyAdminSession(cookieStore.get(ADMIN_COOKIE_NAME)?.value);
+    if (isAdmin) {
+      return (
+        <EbookReader
+          slug={book.slug}
+          bookId={book._id}
+          title={book.title}
+          totalPages={book.ebookPageCount ?? 0}
+          buyerEmail="Admin Preview"
+        />
+      );
+    }
+
     return (
       <section className="mx-auto flex min-h-[60vh] max-w-lg flex-col items-center justify-center px-5 py-20 text-center">
         <div className="mb-4 text-5xl">🔒</div>

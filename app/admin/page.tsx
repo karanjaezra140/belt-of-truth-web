@@ -1,12 +1,22 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { ADMIN_COOKIE_NAME, verifyAdminSession } from "@/lib/admin-session";
 import { isEbookAccessLive } from "@/lib/ebook-session";
-import { getContactSubmissions, getDonations, getAllEbookAccess } from "@/lib/sanity/queries";
+import {
+  getContactSubmissions,
+  getDonations,
+  getAllEbookAccess,
+  getPrograms,
+  getBooks,
+} from "@/lib/sanity/queries";
 import { sanityWriteClient } from "@/lib/sanity/client";
 import { DataTable } from "@/components/admin/DataTable";
 import { LogoutButton } from "@/components/admin/LogoutButton";
+import { AddBookForm } from "@/components/admin/AddBookForm";
+import { SiteMediaForm } from "@/components/admin/SiteMediaForm";
+import { ProgramPhotoUploader } from "@/components/admin/ProgramPhotoUploader";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -18,11 +28,14 @@ export default async function AdminPage() {
   const isValid = verifyAdminSession(cookieStore.get(ADMIN_COOKIE_NAME)?.value);
   if (!isValid) redirect("/admin/login");
 
-  const [submissions, donations, ebookAccess] = await Promise.all([
+  const [submissions, donations, ebookAccess, programs, books] = await Promise.all([
     getContactSubmissions(),
     getDonations(),
     getAllEbookAccess(),
+    getPrograms(),
+    getBooks(),
   ]);
+  const realPrograms = programs.filter((p) => !p._id.startsWith("fallback-"));
 
   const totalRaisedKes = donations.reduce((sum, d) => sum + (d.amountKes ?? 0), 0);
   const activeAccessCount = ebookAccess.filter((a) => isEbookAccessLive(a)).length;
@@ -100,6 +113,53 @@ export default async function AdminPage() {
       </div>
 
       <div className="space-y-12">
+        {sanityWriteClient && (
+          <>
+            <div>
+              <h2 className="mb-3 text-lg font-semibold text-navy-800">Add a New Book</h2>
+              <div className="rounded-xl bg-white p-5 shadow-[0_3px_12px_rgba(0,0,0,0.07)]">
+                <AddBookForm />
+              </div>
+              {books.length > 0 && (
+                <div className="mt-4 flex flex-wrap gap-2">
+                  {books.map((book) => (
+                    <Link
+                      key={book._id}
+                      href={`/read/${book.slug}`}
+                      target="_blank"
+                      className="rounded-full border border-gray-300 px-3 py-1 text-xs font-medium text-gray-600 transition-colors hover:border-navy-800"
+                    >
+                      Preview &ldquo;{book.title}&rdquo; →
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+
+            <div>
+              <h2 className="mb-3 text-lg font-semibold text-navy-800">Site Photos</h2>
+              <div className="rounded-xl bg-white p-5 shadow-[0_3px_12px_rgba(0,0,0,0.07)]">
+                <SiteMediaForm />
+              </div>
+            </div>
+
+            {realPrograms.length > 0 && (
+              <div>
+                <h2 className="mb-3 text-lg font-semibold text-navy-800">Program Photos</h2>
+                <div className="space-y-4 rounded-xl bg-white p-5 shadow-[0_3px_12px_rgba(0,0,0,0.07)]">
+                  {realPrograms.map((program) => (
+                    <ProgramPhotoUploader
+                      key={program._id}
+                      programId={program._id}
+                      title={program.title}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </>
+        )}
+
         <div>
           <h2 className="mb-3 text-lg font-semibold text-navy-800">Join / Volunteer Inquiries</h2>
           <DataTable

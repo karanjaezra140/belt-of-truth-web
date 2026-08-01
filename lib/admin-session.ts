@@ -1,4 +1,5 @@
 import { createHmac, timingSafeEqual } from "node:crypto";
+import { cookies } from "next/headers";
 
 // Minimal HMAC-signed session for the /admin dashboard — same pattern as
 // lib/ebook-session.ts. A single shared password (ADMIN_PASSWORD) is
@@ -68,6 +69,13 @@ export function verifyAdminSession(value: string | undefined | null): boolean {
   } catch {
     return false;
   }
+}
+
+// Shared guard for admin-only Route Handlers (uploads, mutations) — reads
+// the same cookie the dashboard page itself checks.
+export async function isAdminRequestAuthenticated(): Promise<boolean> {
+  const cookieStore = await cookies();
+  return verifyAdminSession(cookieStore.get(COOKIE_NAME)?.value);
 }
 
 export { COOKIE_NAME as ADMIN_COOKIE_NAME, SESSION_TTL_MS as ADMIN_SESSION_TTL_MS };
