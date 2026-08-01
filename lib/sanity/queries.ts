@@ -2,7 +2,9 @@ import { groq } from "next-sanity";
 import { sanityClient, sanityWriteClient } from "./client";
 import type {
   SanityBook,
+  SanityContactSubmission,
   SanityCoreValue,
+  SanityDonation,
   SanityEbookAccess,
   SanityEbookPage,
   SanityProgram,
@@ -122,6 +124,38 @@ export async function getEbookPageCache(
       _id, pageNumber, image{ asset->{url} }
     }`,
     { bookId, pageNumber }
+  );
+}
+
+// The admin dashboard reads use the write client (no CDN) for the same
+// freshness reason as the ebook-access checks above — an admin who just
+// received a donation or submission expects to see it immediately, not
+// after the CDN's cache window. Requires SANITY_API_TOKEN to be set.
+
+export async function getContactSubmissions(): Promise<SanityContactSubmission[]> {
+  if (!sanityWriteClient) return [];
+  return sanityWriteClient.fetch<SanityContactSubmission[]>(
+    groq`*[_type == "contactSubmission"] | order(submittedAt desc) {
+      _id, name, email, phone, interest, message, submittedAt
+    }`
+  );
+}
+
+export async function getDonations(): Promise<SanityDonation[]> {
+  if (!sanityWriteClient) return [];
+  return sanityWriteClient.fetch<SanityDonation[]>(
+    groq`*[_type == "donation"] | order(paidAt desc) {
+      _id, reference, donorName, donorEmail, amountKes, kind, bookTitle, paidAt
+    }`
+  );
+}
+
+export async function getAllEbookAccess(): Promise<SanityEbookAccess[]> {
+  if (!sanityWriteClient) return [];
+  return sanityWriteClient.fetch<SanityEbookAccess[]>(
+    groq`*[_type == "ebookAccess"] | order(createdAt desc) {
+      _id, "book": book->{_id, "slug": slug.current, title}, buyerEmail, tokenHash, reference, expiresAt, revoked, createdAt
+    }`
   );
 }
 

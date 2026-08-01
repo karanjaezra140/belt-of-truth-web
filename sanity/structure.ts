@@ -2,7 +2,7 @@ import type { StructureResolver } from "sanity/structure";
 import {
   HiOutlineHome,
   HiOutlineBookOpen,
-  HiOutlineCurrencyDollar,
+  HiOutlineUserGroup,
 } from "react-icons/hi";
 
 // Plain-language, grouped navigation for non-technical editors. "Ebook Page"
@@ -37,12 +37,15 @@ export const structure: StructureResolver = (S) =>
         .icon(HiOutlineBookOpen)
         .child(S.documentTypeList("book").title("Books")),
       S.listItem()
-        .title("Payments & Access")
-        .icon(HiOutlineCurrencyDollar)
+        .title("People & Payments")
+        .icon(HiOutlineUserGroup)
         .child(
           S.list()
-            .title("Payments & Access")
+            .title("People & Payments")
             .items([
+              S.documentTypeListItem("contactSubmission").title(
+                "Join / Volunteer Inquiries"
+              ),
               S.documentTypeListItem("donation").title("Donations & Purchases"),
               S.documentTypeListItem("ebookAccess").title(
                 "Ebook Reader Access (revoke here if needed)"

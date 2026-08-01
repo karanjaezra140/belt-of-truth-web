@@ -6,6 +6,7 @@ import { siteSettings } from "./siteSettings";
 import { donation } from "./donation";
 import { ebookAccess } from "./ebookAccess";
 import { ebookPage } from "./ebookPage";
+import { contactSubmission } from "./contactSubmission";
 
 export const schemaTypes = [
   program,
@@ -16,4 +17,5 @@ export const schemaTypes = [
   donation,
   ebookAccess,
   ebookPage,
+  contactSubmission,
 ];

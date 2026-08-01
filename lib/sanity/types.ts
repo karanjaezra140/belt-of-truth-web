@@ -40,13 +40,34 @@ export type SanityBook = {
 
 export type SanityEbookAccess = {
   _id: string;
-  book: { _id: string; slug?: string };
+  book: { _id: string; slug?: string; title?: string };
   buyerEmail: string;
   tokenHash: string;
   reference?: string;
   expiresAt: string;
   revoked: boolean;
   createdAt?: string;
+};
+
+export type SanityContactSubmission = {
+  _id: string;
+  name: string;
+  email: string;
+  phone?: string;
+  interest?: string;
+  message: string;
+  submittedAt: string;
+};
+
+export type SanityDonation = {
+  _id: string;
+  reference?: string;
+  donorName?: string;
+  donorEmail?: string;
+  amountKes?: number;
+  kind?: string;
+  bookTitle?: string;
+  paidAt?: string;
 };
 
 export type SanityEbookPage = {
