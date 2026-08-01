@@ -25,6 +25,13 @@ export const program = defineType({
       validation: (rule) => rule.required(),
     }),
     defineField({
+      name: "image",
+      title: "Photo",
+      description: "Shown as the program card's background photo — optional, falls back to a placeholder until added.",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
       name: "order",
       title: "Display order",
       type: "number",

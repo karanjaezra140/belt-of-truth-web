@@ -10,6 +10,10 @@ type MediaSlotProps = {
   alt: string;
   /** Shown on the placeholder when neither src nor videoSrc is provided yet. */
   label: string;
+  /** Optional title shown on hover once a photo exists (or always, on the placeholder). */
+  caption?: string;
+  captionDescription?: string;
+  hideIcon?: boolean;
   rounded?: string;
   className?: string;
 };
@@ -18,7 +22,17 @@ type MediaSlotProps = {
 // an intentional-looking placeholder (not a broken image) when it isn't —
 // so unfilled sections still read as finished design while real photos and
 // videos are pending.
-export function MediaSlot({ src, videoSrc, alt, label, rounded = NOTCH, className }: MediaSlotProps) {
+export function MediaSlot({
+  src,
+  videoSrc,
+  alt,
+  label,
+  caption,
+  captionDescription,
+  hideIcon,
+  rounded = NOTCH,
+  className,
+}: MediaSlotProps) {
   if (src) {
     return (
       <EffectImage
@@ -27,6 +41,9 @@ export function MediaSlot({ src, videoSrc, alt, label, rounded = NOTCH, classNam
         fill
         rounded={rounded}
         containerClassName={className}
+        caption={caption}
+        captionDescription={captionDescription}
+        hideIcon={hideIcon}
       />
     );
   }
@@ -61,6 +78,9 @@ export function MediaSlot({ src, videoSrc, alt, label, rounded = NOTCH, classNam
       <p className="max-w-[220px] px-4 text-xs font-medium uppercase tracking-wide text-navy-800/40">
         Photo or video coming soon — {label}
       </p>
+      {caption && (
+        <p className="max-w-[220px] px-4 text-sm font-semibold text-navy-800/60">{caption}</p>
+      )}
     </div>
   );
 }

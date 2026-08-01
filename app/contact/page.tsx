@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
+import { HiOutlineLocationMarker, HiOutlineMail, HiOutlineChat } from "react-icons/hi";
 import { ContactForm } from "@/components/ContactForm";
 import { SocialLinks } from "@/components/SocialLinks";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
+import { PhotoCTA } from "@/components/ui/PhotoCTA";
+import { SOCIAL_LINKS } from "@/lib/site-config";
+import { getSiteSettings } from "@/lib/sanity/queries";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -9,20 +13,45 @@ export const metadata: Metadata = {
     "Reach out to Belt of Truth Mentorship to join our mentorship programs, volunteer, or partner with us.",
 };
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const { contactEmail } = await getSiteSettings();
+  const whatsapp = SOCIAL_LINKS.find((s) => s.icon === "whatsapp");
+
+  const infoItems = [
+    { icon: HiOutlineLocationMarker, title: "Visit Us", detail: "Kenya" },
+    whatsapp && { icon: HiOutlineChat, title: "Message Us", detail: whatsapp.href.replace("https://wa.me/", "+") },
+    contactEmail && { icon: HiOutlineMail, title: "Email Us", detail: contactEmail },
+  ].filter((item): item is { icon: typeof HiOutlineMail; title: string; detail: string } => Boolean(item));
+
   return (
     <>
-      <section className="mx-auto max-w-2xl px-5 py-16 text-center">
-        <h1 className="font-display text-3xl font-bold text-navy-800 md:text-4xl">
-          Contact Us
-        </h1>
-        <p className="mt-3 text-gray-600">
-          Reach out to join our mentorship programs, volunteer, or partner
-          with us.
-        </p>
-      </section>
+      <PhotoCTA
+        eyebrow="get in touch."
+        title="We'd Love to Hear From You"
+        buttonLabel="Send a Message"
+        buttonHref="#message"
+        mediaAlt="Someone reaching out to Belt of Truth Mentorship"
+        mediaLabel="contact hero photo"
+      />
 
-      <AnimatedSection className="px-5 pb-16">
+      <AnimatedSection className="mx-auto max-w-5xl px-5 pb-16">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+          {infoItems.map((item) => (
+            <div
+              key={item.title}
+              className="flex flex-col items-center gap-3 rounded-xl bg-white p-6 text-center shadow-[0_3px_12px_rgba(0,0,0,0.07)]"
+            >
+              <span className="flex h-14 w-14 items-center justify-center rounded-full border-2 border-gold-500 bg-gold-500/10 text-2xl text-navy-800">
+                <item.icon />
+              </span>
+              <h3 className="text-base font-semibold text-navy-800">{item.title}</h3>
+              <p className="text-sm text-gray-600">{item.detail}</p>
+            </div>
+          ))}
+        </div>
+      </AnimatedSection>
+
+      <AnimatedSection id="message" className="scroll-mt-20 px-5 pb-16">
         <ContactForm />
       </AnimatedSection>
 

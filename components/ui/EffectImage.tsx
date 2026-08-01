@@ -9,6 +9,9 @@ type EffectImageProps = Omit<ImageProps, "className"> & {
   imageClassName?: string;
   /** Hide the centered icon reveal — useful for small thumbnails. */
   hideIcon?: boolean;
+  /** Title shown over the photo; if set, replaces the centered "+" reveal with a bottom caption that fades/slides in on hover. */
+  caption?: string;
+  captionDescription?: string;
 };
 
 export function EffectImage({
@@ -16,6 +19,8 @@ export function EffectImage({
   containerClassName,
   imageClassName,
   hideIcon = false,
+  caption,
+  captionDescription,
   alt,
   ...imageProps
 }: EffectImageProps) {
@@ -36,12 +41,26 @@ export function EffectImage({
         )}
       />
       <div className="pointer-events-none absolute inset-0 bg-navy-950/0 transition-colors duration-500 group-hover:bg-navy-950/40" />
-      {!hideIcon && (
-        <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
-          <span className="flex h-12 w-12 scale-0 items-center justify-center rounded-full bg-gold-500 text-navy-950 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
-            <HiOutlinePlus className="text-2xl" />
-          </span>
+
+      {caption ? (
+        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-5">
+          <h3 className="font-display translate-y-3 text-lg font-bold text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+            {caption}
+          </h3>
+          {captionDescription && (
+            <p className="mt-1 line-clamp-2 translate-y-3 text-[13px] leading-relaxed text-white/85 opacity-0 transition-all delay-75 duration-300 group-hover:translate-y-0 group-hover:opacity-100">
+              {captionDescription}
+            </p>
+          )}
         </div>
+      ) : (
+        !hideIcon && (
+          <div className="pointer-events-none absolute inset-0 flex items-center justify-center">
+            <span className="flex h-12 w-12 scale-0 items-center justify-center rounded-full bg-gold-500 text-navy-950 opacity-0 transition-all duration-300 group-hover:scale-100 group-hover:opacity-100">
+              <HiOutlinePlus className="text-2xl" />
+            </span>
+          </div>
+        )
       )}
     </div>
   );

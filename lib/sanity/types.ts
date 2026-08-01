@@ -6,6 +6,7 @@ export type SanityProgram = {
   title: string;
   emoji?: string;
   description: string;
+  image?: SanityImageSource;
 };
 
 export type SanityCoreValue = {

@@ -24,7 +24,7 @@ import {
 export async function getPrograms(): Promise<SanityProgram[]> {
   if (!sanityClient) return fallbackPrograms();
   const results = await sanityClient.fetch<SanityProgram[]>(
-    groq`*[_type == "program"] | order(order asc) { _id, title, emoji, description }`
+    groq`*[_type == "program"] | order(order asc) { _id, title, emoji, description, image }`
   );
   return results.length ? results : fallbackPrograms();
 }
