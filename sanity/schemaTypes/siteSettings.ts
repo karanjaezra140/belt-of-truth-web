@@ -6,6 +6,14 @@ export const siteSettings = defineType({
   type: "document",
   fields: [
     defineField({
+      name: "heroImages",
+      title: "Homepage — rotating hero photos",
+      description: "Upload as many as you like — they'll auto-rotate behind the homepage headline. Leave empty to keep the single default photo.",
+      type: "array",
+      of: [{ type: "image", options: { hotspot: true } }],
+      validation: (rule) => rule.max(8),
+    }),
+    defineField({
       name: "heroStats",
       title: "Homepage impact stats",
       type: "array",

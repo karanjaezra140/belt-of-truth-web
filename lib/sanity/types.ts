@@ -56,6 +56,7 @@ export type SanityEbookPage = {
 };
 
 export type SanitySiteSettings = {
+  heroImages?: SanityImageSource[];
   heroStats?: { number: string; label: string }[];
   founderName?: string;
   founderPhoto?: SanityImageSource;

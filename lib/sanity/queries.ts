@@ -129,7 +129,7 @@ export async function getSiteSettings(): Promise<SanitySiteSettings> {
   if (!sanityClient) return fallbackSiteSettings();
   const result = await sanityClient.fetch<SanitySiteSettings | null>(
     groq`*[_type == "siteSettings"][0] {
-      heroStats, founderName, founderPhoto, founderBio, contactEmail, whatsappNumber,
+      heroImages, heroStats, founderName, founderPhoto, founderBio, contactEmail, whatsappNumber,
       missionVisionPhoto, missionVisionVideo{ asset->{url} },
       contactHeroPhoto, contactHeroVideo{ asset->{url} }
     }`

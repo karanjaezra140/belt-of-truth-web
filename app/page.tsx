@@ -5,6 +5,7 @@ import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { CTASection } from "@/components/ui/CTASection";
 import { MediaSlot } from "@/components/ui/MediaSlot";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
+import { HeroSlideshow } from "@/components/HeroSlideshow";
 import {
   FOCUS_AREAS,
   MISSION_VISION_POINTS,
@@ -16,22 +17,32 @@ import { getSiteSettings } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 
 export default async function HomePage() {
-  const { heroStats, missionVisionPhoto, missionVisionVideo } = await getSiteSettings();
+  const { heroStats, heroImages, missionVisionPhoto, missionVisionVideo } = await getSiteSettings();
   const missionVisionPhotoUrl = missionVisionPhoto
     ? urlFor(missionVisionPhoto)?.width(800).height(600).fit("crop").url()
     : undefined;
+  const heroImageUrls = (heroImages ?? [])
+    .map((img) => urlFor(img)?.width(1920).height(1280).fit("crop").url())
+    .filter((url): url is string => Boolean(url));
 
   return (
     <>
       {/* HERO */}
       <section className="relative flex min-h-[90vh] items-center overflow-hidden text-left">
-        <Image
-          src="/images/school_visit.jpeg"
-          alt="Belt of Truth mentors engaging with students at a school visit"
-          fill
-          priority
-          className="object-cover"
-        />
+        {heroImageUrls.length > 0 ? (
+          <HeroSlideshow
+            images={heroImageUrls}
+            alt="Belt of Truth Mentorship"
+          />
+        ) : (
+          <Image
+            src="/images/school_visit.jpeg"
+            alt="Belt of Truth mentors engaging with students at a school visit"
+            fill
+            priority
+            className="object-cover"
+          />
+        )}
         <div className="absolute inset-0 bg-gradient-to-r from-navy-950/85 via-navy-950/55 to-navy-950/20" />
         <div className="absolute inset-0 bg-gradient-to-t from-navy-950/70 via-transparent to-transparent" />
 
