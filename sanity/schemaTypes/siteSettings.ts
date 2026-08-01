@@ -48,6 +48,34 @@ export const siteSettings = defineType({
       type: "string",
       description: "International format, e.g. 254712345678",
     }),
+    defineField({
+      name: "missionVisionPhoto",
+      title: "Homepage — Mission & Vision photo",
+      description: "Shown on the homepage's Mission & Vision section. Ignored if a video is set below.",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "missionVisionVideo",
+      title: "Homepage — Mission & Vision video (optional)",
+      description: "Takes priority over the photo above if set. Keep the file small — large videos slow the page down.",
+      type: "file",
+      options: { accept: "video/*" },
+    }),
+    defineField({
+      name: "contactHeroPhoto",
+      title: "Contact page — hero photo",
+      description: "Shown at the top of the Contact page. Ignored if a video is set below.",
+      type: "image",
+      options: { hotspot: true },
+    }),
+    defineField({
+      name: "contactHeroVideo",
+      title: "Contact page — hero video (optional)",
+      description: "Takes priority over the photo above if set. Keep the file small — large videos slow the page down.",
+      type: "file",
+      options: { accept: "video/*" },
+    }),
   ],
   preview: {
     prepare() {

@@ -13,9 +13,13 @@ import {
   HOW_IT_WORKS_STEPS,
 } from "@/lib/site-config";
 import { getSiteSettings } from "@/lib/sanity/queries";
+import { urlFor } from "@/lib/sanity/image";
 
 export default async function HomePage() {
-  const { heroStats } = await getSiteSettings();
+  const { heroStats, missionVisionPhoto, missionVisionVideo } = await getSiteSettings();
+  const missionVisionPhotoUrl = missionVisionPhoto
+    ? urlFor(missionVisionPhoto)?.width(800).height(600).fit("crop").url()
+    : undefined;
 
   return (
     <>
@@ -104,6 +108,8 @@ export default async function HomePage() {
             </ul>
           </div>
           <MediaSlot
+            src={missionVisionPhotoUrl}
+            videoSrc={missionVisionVideo?.asset?.url}
             alt="Belt of Truth mentorship session"
             label="mission & vision photo or video"
             className="aspect-[4/3] w-full"

@@ -62,4 +62,8 @@ export type SanitySiteSettings = {
   founderBio?: PortableTextBlock[];
   contactEmail?: string;
   whatsappNumber?: string;
+  missionVisionPhoto?: SanityImageSource;
+  missionVisionVideo?: { asset?: { url?: string } };
+  contactHeroPhoto?: SanityImageSource;
+  contactHeroVideo?: { asset?: { url?: string } };
 };

@@ -6,6 +6,7 @@ import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { PhotoCTA } from "@/components/ui/PhotoCTA";
 import { SOCIAL_LINKS } from "@/lib/site-config";
 import { getSiteSettings } from "@/lib/sanity/queries";
+import { urlFor } from "@/lib/sanity/image";
 
 export const metadata: Metadata = {
   title: "Contact",
@@ -14,7 +15,10 @@ export const metadata: Metadata = {
 };
 
 export default async function ContactPage() {
-  const { contactEmail } = await getSiteSettings();
+  const { contactEmail, contactHeroPhoto, contactHeroVideo } = await getSiteSettings();
+  const contactHeroPhotoUrl = contactHeroPhoto
+    ? urlFor(contactHeroPhoto)?.width(1000).height(500).fit("crop").url()
+    : undefined;
   const whatsapp = SOCIAL_LINKS.find((s) => s.icon === "whatsapp");
 
   const infoItems = [
@@ -32,6 +36,8 @@ export default async function ContactPage() {
         buttonHref="#message"
         mediaAlt="Someone reaching out to Belt of Truth Mentorship"
         mediaLabel="contact hero photo"
+        mediaSrc={contactHeroPhotoUrl}
+        mediaVideoSrc={contactHeroVideo?.asset?.url}
       />
 
       <AnimatedSection className="mx-auto max-w-5xl px-5 pb-16">

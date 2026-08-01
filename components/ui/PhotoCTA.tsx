@@ -10,6 +10,7 @@ type PhotoCTAProps = {
   mediaAlt: string;
   mediaLabel: string;
   mediaSrc?: string;
+  mediaVideoSrc?: string;
 };
 
 // Photo-backed CTA banner matching the reference site's "Become a Volunteer"
@@ -23,12 +24,14 @@ export function PhotoCTA({
   mediaAlt,
   mediaLabel,
   mediaSrc,
+  mediaVideoSrc,
 }: PhotoCTAProps) {
   return (
     <div className="px-5 py-12 md:py-16">
       <div className={`relative mx-auto min-h-[300px] max-w-5xl overflow-hidden ${NOTCH}`}>
         <MediaSlot
           src={mediaSrc}
+          videoSrc={mediaVideoSrc}
           alt={mediaAlt}
           label={mediaLabel}
           className="absolute inset-0"
