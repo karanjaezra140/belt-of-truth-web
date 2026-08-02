@@ -7,13 +7,17 @@ import type {
   SanityDonation,
   SanityEbookAccess,
   SanityEbookPage,
+  SanityFocusArea,
+  SanityFreeResource,
   SanityProgram,
   SanitySiteSettings,
   SanityTestimony,
 } from "./types";
 import {
   CORE_VALUES,
+  FOCUS_AREAS,
   FOUNDER,
+  FREE_RESOURCES,
   IMPACT_STATS,
   PROGRAMS,
 } from "@/lib/site-config";
@@ -29,6 +33,22 @@ export async function getPrograms(): Promise<SanityProgram[]> {
     groq`*[_type == "program"] | order(order asc) { _id, title, emoji, description, image }`
   );
   return results.length ? results : fallbackPrograms();
+}
+
+export async function getFocusAreas(): Promise<SanityFocusArea[]> {
+  if (!sanityClient) return fallbackFocusAreas();
+  const results = await sanityClient.fetch<SanityFocusArea[]>(
+    groq`*[_type == "focusArea"] | order(order asc) { _id, title, emoji, image }`
+  );
+  return results.length ? results : fallbackFocusAreas();
+}
+
+export async function getFreeResources(): Promise<SanityFreeResource[]> {
+  if (!sanityClient) return fallbackFreeResources();
+  const results = await sanityClient.fetch<SanityFreeResource[]>(
+    groq`*[_type == "freeResource"] | order(order asc) { _id, title, emoji, description, image }`
+  );
+  return results.length ? results : fallbackFreeResources();
 }
 
 export async function getCoreValues(): Promise<SanityCoreValue[]> {
@@ -194,6 +214,14 @@ export async function getSiteSettings(): Promise<SanitySiteSettings> {
 
 function fallbackPrograms(): SanityProgram[] {
   return PROGRAMS.map((p, i) => ({ _id: `fallback-${i}`, ...p }));
+}
+
+function fallbackFocusAreas(): SanityFocusArea[] {
+  return FOCUS_AREAS.map((f, i) => ({ _id: `fallback-${i}`, ...f }));
+}
+
+function fallbackFreeResources(): SanityFreeResource[] {
+  return FREE_RESOURCES.map((r, i) => ({ _id: `fallback-${i}`, ...r }));
 }
 
 function fallbackCoreValues(): SanityCoreValue[] {

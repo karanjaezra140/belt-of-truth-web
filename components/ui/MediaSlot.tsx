@@ -13,6 +13,7 @@ type MediaSlotProps = {
   /** Optional title shown on hover once a photo exists (or always, on the placeholder). */
   caption?: string;
   captionDescription?: string;
+  captionAlwaysVisible?: boolean;
   hideIcon?: boolean;
   rounded?: string;
   className?: string;
@@ -29,6 +30,7 @@ export function MediaSlot({
   label,
   caption,
   captionDescription,
+  captionAlwaysVisible,
   hideIcon,
   rounded = NOTCH,
   className,
@@ -43,6 +45,7 @@ export function MediaSlot({
         containerClassName={className}
         caption={caption}
         captionDescription={captionDescription}
+        captionAlwaysVisible={captionAlwaysVisible}
         hideIcon={hideIcon}
       />
     );

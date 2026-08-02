@@ -27,7 +27,9 @@ export const structure: StructureResolver = (S) =>
                   S.document().schemaType("siteSettings").documentId("siteSettings")
                 ),
               S.divider(),
+              S.documentTypeListItem("focusArea").title("Focus Areas"),
               S.documentTypeListItem("program").title("Programs"),
+              S.documentTypeListItem("freeResource").title("Free Resources"),
               S.documentTypeListItem("coreValue").title("Core Values"),
               S.documentTypeListItem("testimony").title("Stories"),
             ])

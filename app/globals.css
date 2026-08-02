@@ -30,8 +30,8 @@
   --color-gold-500: var(--color-gold-500);
   --color-gold-600: var(--color-gold-600);
 
-  --font-display: var(--font-playfair);
-  --font-sans: var(--font-dm-sans);
+  --font-display: var(--font-pt-serif);
+  --font-sans: var(--font-barlow);
 }
 
 body {

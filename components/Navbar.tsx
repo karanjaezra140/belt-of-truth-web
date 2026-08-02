@@ -14,19 +14,20 @@ export function Navbar() {
 
   return (
     <header className="sticky top-0 z-50 bg-navy-800 shadow-lg shadow-black/10">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-2 md:px-8">
-        <Link href="/" className="flex items-center gap-2.5" onClick={() => setOpen(false)}>
+      <div className="mx-auto flex max-w-6xl items-center justify-between gap-6 px-5 py-3 md:px-8">
+        <Link
+          href="/"
+          className="flex shrink-0 items-center rounded-xl bg-white px-3 py-1.5 shadow-sm"
+          onClick={() => setOpen(false)}
+        >
           <Image
-            src="/images/logo.png"
-            alt="Belt of Truth Mentorship logo"
-            width={64}
-            height={64}
-            className="h-14 w-auto object-contain"
+            src="/images/logo-navbar.png"
+            alt="Belt of Truth Mentorship"
+            width={220}
+            height={120}
+            className="h-12 w-auto object-contain md:h-14"
             priority
           />
-          <span className="font-display text-lg font-bold text-white">
-            Belt of Truth
-          </span>
         </Link>
 
         <button
@@ -41,7 +42,7 @@ export function Navbar() {
 
         <nav
           className={cn(
-            "absolute left-0 top-full w-full flex-col bg-navy-800 pb-3 shadow-lg md:static md:flex md:w-auto md:flex-row md:items-center md:gap-1 md:bg-transparent md:pb-0 md:shadow-none",
+            "absolute left-0 top-full w-full flex-col bg-navy-800 pb-3 shadow-lg md:static md:flex md:w-auto md:flex-row md:items-center md:gap-2 md:bg-transparent md:pb-0 md:shadow-none",
             open ? "flex" : "hidden"
           )}
         >
@@ -54,7 +55,7 @@ export function Navbar() {
                 href={link.href}
                 onClick={() => setOpen(false)}
                 className={cn(
-                  "block px-5 py-3 text-[15px] font-medium text-white transition-colors hover:bg-white/10 md:rounded-md md:px-3.5 md:py-2",
+                  "block px-5 py-3 text-[15px] font-medium text-white transition-colors hover:bg-white/10 md:rounded-md md:px-4 md:py-2.5",
                   active && "bg-white/10 md:border-b-2 md:border-gold-500"
                 )}
               >

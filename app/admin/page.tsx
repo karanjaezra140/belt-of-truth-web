@@ -9,6 +9,8 @@ import {
   getDonations,
   getAllEbookAccess,
   getPrograms,
+  getFocusAreas,
+  getFreeResources,
   getBooks,
 } from "@/lib/sanity/queries";
 import { sanityWriteClient } from "@/lib/sanity/client";
@@ -16,7 +18,7 @@ import { DataTable } from "@/components/admin/DataTable";
 import { LogoutButton } from "@/components/admin/LogoutButton";
 import { AddBookForm } from "@/components/admin/AddBookForm";
 import { SiteMediaForm } from "@/components/admin/SiteMediaForm";
-import { ProgramPhotoUploader } from "@/components/admin/ProgramPhotoUploader";
+import { DocumentPhotoUploader } from "@/components/admin/DocumentPhotoUploader";
 
 export const metadata: Metadata = {
   title: "Admin Dashboard",
@@ -28,14 +30,19 @@ export default async function AdminPage() {
   const isValid = verifyAdminSession(cookieStore.get(ADMIN_COOKIE_NAME)?.value);
   if (!isValid) redirect("/admin/login");
 
-  const [submissions, donations, ebookAccess, programs, books] = await Promise.all([
-    getContactSubmissions(),
-    getDonations(),
-    getAllEbookAccess(),
-    getPrograms(),
-    getBooks(),
-  ]);
+  const [submissions, donations, ebookAccess, programs, focusAreas, freeResources, books] =
+    await Promise.all([
+      getContactSubmissions(),
+      getDonations(),
+      getAllEbookAccess(),
+      getPrograms(),
+      getFocusAreas(),
+      getFreeResources(),
+      getBooks(),
+    ]);
   const realPrograms = programs.filter((p) => !p._id.startsWith("fallback-"));
+  const realFocusAreas = focusAreas.filter((f) => !f._id.startsWith("fallback-"));
+  const realFreeResources = freeResources.filter((r) => !r._id.startsWith("fallback-"));
 
   const totalRaisedKes = donations.reduce((sum, d) => sum + (d.amountKes ?? 0), 0);
   const activeAccessCount = ebookAccess.filter((a) => isEbookAccessLive(a)).length;
@@ -143,15 +150,48 @@ export default async function AdminPage() {
               </div>
             </div>
 
+            {realFocusAreas.length > 0 && (
+              <div>
+                <h2 className="mb-3 text-lg font-semibold text-navy-800">Focus Area Photos</h2>
+                <div className="space-y-4 rounded-xl bg-white p-5 shadow-[0_3px_12px_rgba(0,0,0,0.07)]">
+                  {realFocusAreas.map((area) => (
+                    <DocumentPhotoUploader
+                      key={area._id}
+                      documentId={area._id}
+                      title={area.title}
+                      kind="focus-areas"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
             {realPrograms.length > 0 && (
               <div>
                 <h2 className="mb-3 text-lg font-semibold text-navy-800">Program Photos</h2>
                 <div className="space-y-4 rounded-xl bg-white p-5 shadow-[0_3px_12px_rgba(0,0,0,0.07)]">
                   {realPrograms.map((program) => (
-                    <ProgramPhotoUploader
+                    <DocumentPhotoUploader
                       key={program._id}
-                      programId={program._id}
+                      documentId={program._id}
                       title={program.title}
+                      kind="programs"
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {realFreeResources.length > 0 && (
+              <div>
+                <h2 className="mb-3 text-lg font-semibold text-navy-800">Free Resource Photos</h2>
+                <div className="space-y-4 rounded-xl bg-white p-5 shadow-[0_3px_12px_rgba(0,0,0,0.07)]">
+                  {realFreeResources.map((resource) => (
+                    <DocumentPhotoUploader
+                      key={resource._id}
+                      documentId={resource._id}
+                      title={resource.title}
+                      kind="free-resources"
                     />
                   ))}
                 </div>

@@ -1,21 +1,25 @@
 import type { Metadata } from "next";
-import { DM_Sans, Playfair_Display } from "next/font/google";
+import { Barlow, PT_Serif } from "next/font/google";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { CustomCursor } from "@/components/CustomCursor";
 import { SITE_NAME, SITE_URL } from "@/lib/site-config";
 import "./globals.css";
 
-const playfair = Playfair_Display({
-  variable: "--font-playfair",
+// Matches the reference site's typography: a classic, moderate-contrast
+// serif for headings (PT Serif — close to the plain book/newspaper serif
+// look in their screenshots) and Barlow for everything else, the exact
+// sans-serif family their theme loads for body text, nav, and buttons.
+const ptSerif = PT_Serif({
+  variable: "--font-pt-serif",
   subsets: ["latin"],
-  weight: ["700", "900"],
+  weight: ["400", "700"],
 });
 
-const dmSans = DM_Sans({
-  variable: "--font-dm-sans",
+const barlow = Barlow({
+  variable: "--font-barlow",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["400", "500", "600", "700"],
 });
 
 export const metadata: Metadata = {
@@ -44,7 +48,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${playfair.variable} ${dmSans.variable} h-full antialiased`}
+      className={`${ptSerif.variable} ${barlow.variable} h-full antialiased`}
     >
       <body className="flex min-h-full flex-col font-sans">
         <CustomCursor />

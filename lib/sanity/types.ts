@@ -9,6 +9,21 @@ export type SanityProgram = {
   image?: SanityImageSource;
 };
 
+export type SanityFocusArea = {
+  _id: string;
+  title: string;
+  emoji?: string;
+  image?: SanityImageSource;
+};
+
+export type SanityFreeResource = {
+  _id: string;
+  title: string;
+  emoji?: string;
+  description: string;
+  image?: SanityImageSource;
+};
+
 export type SanityCoreValue = {
   _id: string;
   title: string;

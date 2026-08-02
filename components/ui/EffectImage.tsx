@@ -12,6 +12,8 @@ type EffectImageProps = Omit<ImageProps, "className"> & {
   /** Title shown over the photo; if set, replaces the centered "+" reveal with a bottom caption that fades/slides in on hover. */
   caption?: string;
   captionDescription?: string;
+  /** Keep the caption visible at all times instead of only on hover — for scannable tile grids (e.g. Focus Areas) rather than discoverable detail cards. */
+  captionAlwaysVisible?: boolean;
 };
 
 export function EffectImage({
@@ -21,6 +23,7 @@ export function EffectImage({
   hideIcon = false,
   caption,
   captionDescription,
+  captionAlwaysVisible = false,
   alt,
   ...imageProps
 }: EffectImageProps) {
@@ -43,16 +46,35 @@ export function EffectImage({
       <div className="pointer-events-none absolute inset-0 bg-navy-950/0 transition-colors duration-500 group-hover:bg-navy-950/40" />
 
       {caption ? (
-        <div className="pointer-events-none absolute inset-x-0 bottom-0 p-5">
-          <h3 className="font-display translate-y-3 text-lg font-bold text-white opacity-0 transition-all duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-            {caption}
-          </h3>
-          {captionDescription && (
-            <p className="mt-1 line-clamp-2 translate-y-3 text-[13px] leading-relaxed text-white/85 opacity-0 transition-all delay-75 duration-300 group-hover:translate-y-0 group-hover:opacity-100">
-              {captionDescription}
-            </p>
+        <>
+          {captionAlwaysVisible && (
+            <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2/3 bg-gradient-to-t from-navy-950/85 via-navy-950/25 to-transparent" />
           )}
-        </div>
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 p-5">
+            <h3
+              className={cn(
+                "font-display text-lg font-bold text-white transition-all duration-300",
+                captionAlwaysVisible
+                  ? "translate-y-0 opacity-100"
+                  : "translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+              )}
+            >
+              {caption}
+            </h3>
+            {captionDescription && (
+              <p
+                className={cn(
+                  "mt-1 line-clamp-2 text-[13px] leading-relaxed text-white/85 transition-all delay-75 duration-300",
+                  captionAlwaysVisible
+                    ? "translate-y-0 opacity-100"
+                    : "translate-y-3 opacity-0 group-hover:translate-y-0 group-hover:opacity-100"
+                )}
+              >
+                {captionDescription}
+              </p>
+            )}
+          </div>
+        </>
       ) : (
         !hideIcon && (
           <div className="pointer-events-none absolute inset-0 flex items-center justify-center">

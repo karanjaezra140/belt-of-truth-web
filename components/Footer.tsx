@@ -9,15 +9,16 @@ export function Footer() {
   return (
     <footer className="mt-auto bg-navy-950 px-5 pb-6 pt-14 text-gray-300 md:px-8">
       <div className="mx-auto flex max-w-6xl flex-col gap-10 md:flex-row md:justify-between">
-        <div className="flex flex-col items-start gap-1.5 md:flex-[2]">
-          <Image
-            src="/images/logo.png"
-            alt={`${SITE_NAME} logo`}
-            width={48}
-            height={48}
-            className="mb-1 h-12 w-auto object-contain"
-          />
-          <p className="font-display text-base text-white">{SITE_NAME}</p>
+        <div className="flex flex-col items-start gap-2 md:flex-[2]">
+          <div className="mb-1 inline-flex rounded-xl bg-white px-3 py-1.5">
+            <Image
+              src="/images/logo-navbar.png"
+              alt={`${SITE_NAME} logo`}
+              width={220}
+              height={120}
+              className="h-12 w-auto object-contain"
+            />
+          </div>
           <p className="text-[13px] italic text-gray-400">
             Empowering lives through truth and purpose
           </p>

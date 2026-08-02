@@ -1,4 +1,6 @@
 import { program } from "./program";
+import { focusArea } from "./focusArea";
+import { freeResource } from "./freeResource";
 import { coreValue } from "./coreValue";
 import { testimony } from "./testimony";
 import { book } from "./book";
@@ -10,6 +12,8 @@ import { contactSubmission } from "./contactSubmission";
 
 export const schemaTypes = [
   program,
+  focusArea,
+  freeResource,
   coreValue,
   testimony,
   book,

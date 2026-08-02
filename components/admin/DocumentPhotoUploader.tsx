@@ -3,7 +3,14 @@
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 
-export function ProgramPhotoUploader({ programId, title }: { programId: string; title: string }) {
+type DocumentPhotoUploaderProps = {
+  documentId: string;
+  title: string;
+  /** e.g. "programs" or "focus-areas" — matches /api/admin/<kind>/[id]/photo */
+  kind: "programs" | "focus-areas" | "free-resources";
+};
+
+export function DocumentPhotoUploader({ documentId, title, kind }: DocumentPhotoUploaderProps) {
   const router = useRouter();
   const inputRef = useRef<HTMLInputElement>(null);
   const [status, setStatus] = useState<"idle" | "uploading" | "error" | "success">("idle");
@@ -17,7 +24,7 @@ export function ProgramPhotoUploader({ programId, title }: { programId: string; 
     try {
       const formData = new FormData();
       formData.append("photo", file);
-      const res = await fetch(`/api/admin/programs/${programId}/photo`, {
+      const res = await fetch(`/api/admin/${kind}/${documentId}/photo`, {
         method: "POST",
         body: formData,
       });

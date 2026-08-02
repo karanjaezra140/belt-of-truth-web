@@ -1,13 +1,15 @@
 import type { Metadata } from "next";
 import { PageHero } from "@/components/ui/PageHero";
 import { SectionHeading } from "@/components/ui/SectionHeading";
-import { IconCard } from "@/components/ui/IconCard";
+import { MediaSlot } from "@/components/ui/MediaSlot";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { CTASection } from "@/components/ui/CTASection";
 import { BookCard } from "@/components/BookCard";
 import { HiChevronDown } from "react-icons/hi";
-import { FREE_RESOURCES, FAQS } from "@/lib/site-config";
-import { getBooks } from "@/lib/sanity/queries";
+import { NOTCH } from "@/lib/utils";
+import { FAQS } from "@/lib/site-config";
+import { getBooks, getFreeResources } from "@/lib/sanity/queries";
+import { urlFor } from "@/lib/sanity/image";
 import { isSanityConfigured } from "@/lib/sanity/client";
 
 export const metadata: Metadata = {
@@ -17,7 +19,7 @@ export const metadata: Metadata = {
 };
 
 export default async function ResourcesPage() {
-  const books = await getBooks();
+  const [books, freeResources] = await Promise.all([getBooks(), getFreeResources()]);
 
   return (
     <>
@@ -29,16 +31,24 @@ export default async function ResourcesPage() {
       <AnimatedSection className="mx-auto max-w-6xl px-5 py-16">
         <SectionHeading eyebrow="at no cost." title="Free Resources" />
         <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
-          {FREE_RESOURCES.map((resource) => (
-            <IconCard
-              key={resource.title}
-              emoji={resource.emoji}
-              title={resource.title}
-              variant="circle"
-            >
-              {resource.description}
-            </IconCard>
-          ))}
+          {freeResources.map((resource) => {
+            const photoUrl = resource.image
+              ? urlFor(resource.image)?.width(500).height(400).fit("crop").url()
+              : undefined;
+            return (
+              <div key={resource._id} className={`relative aspect-[5/4] overflow-hidden ${NOTCH}`}>
+                <MediaSlot
+                  src={photoUrl}
+                  alt={resource.title}
+                  label={resource.title}
+                  caption={`${resource.emoji ? `${resource.emoji} ` : ""}${resource.title}`}
+                  captionDescription={resource.description}
+                  className="absolute inset-0"
+                  rounded=""
+                />
+              </div>
+            );
+          })}
         </div>
       </AnimatedSection>
 

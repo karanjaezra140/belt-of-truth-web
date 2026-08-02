@@ -1,23 +1,24 @@
 import Image from "next/image";
+import { HiOutlineAcademicCap, HiOutlineUserGroup, HiOutlineSparkles } from "react-icons/hi";
 import { Button } from "@/components/ui/Button";
-import { IconCard } from "@/components/ui/IconCard";
 import { AnimatedSection } from "@/components/ui/AnimatedSection";
 import { CTASection } from "@/components/ui/CTASection";
 import { MediaSlot } from "@/components/ui/MediaSlot";
 import { AnimatedCounter } from "@/components/ui/AnimatedCounter";
 import { HeroSlideshow } from "@/components/HeroSlideshow";
+import { NOTCH } from "@/lib/utils";
 import {
-  FOCUS_AREAS,
   MISSION_VISION_POINTS,
   MISSION_STATEMENT,
   VISION_STATEMENT,
   HOW_IT_WORKS_STEPS,
 } from "@/lib/site-config";
-import { getSiteSettings } from "@/lib/sanity/queries";
+import { getSiteSettings, getFocusAreas } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 
 export default async function HomePage() {
-  const { heroStats, heroImages, missionVisionPhoto, missionVisionVideo } = await getSiteSettings();
+  const [{ heroStats, heroImages, missionVisionPhoto, missionVisionVideo }, focusAreas] =
+    await Promise.all([getSiteSettings(), getFocusAreas()]);
   const missionVisionPhotoUrl = missionVisionPhoto
     ? urlFor(missionVisionPhoto)?.width(800).height(600).fit("crop").url()
     : undefined;
@@ -148,14 +149,25 @@ export default async function HomePage() {
           Our Focus Areas
         </h2>
         <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
-          {FOCUS_AREAS.map((area) => (
-            <IconCard
-              key={area.title}
-              emoji={area.emoji}
-              title={area.title}
-              variant="circle"
-            />
-          ))}
+          {focusAreas.map((area) => {
+            const photoUrl = area.image
+              ? urlFor(area.image)?.width(500).height(650).fit("crop").url()
+              : undefined;
+            return (
+              <div key={area._id} className={`relative aspect-[3/4] overflow-hidden ${NOTCH}`}>
+                <MediaSlot
+                  src={photoUrl}
+                  alt={area.title}
+                  label={area.title}
+                  caption={area.title}
+                  captionAlwaysVisible
+                  hideIcon
+                  className="absolute inset-0"
+                  rounded=""
+                />
+              </div>
+            );
+          })}
         </div>
       </AnimatedSection>
 
@@ -198,6 +210,42 @@ export default async function HomePage() {
               </p>
             </div>
           ))}
+        </div>
+      </AnimatedSection>
+
+      {/* ACTION TO IMPACT */}
+      <AnimatedSection
+        className="relative overflow-hidden bg-gray-50 px-5 py-16 text-center"
+        style={{
+          backgroundImage:
+            "radial-gradient(circle, rgba(11,61,145,0.14) 1.5px, transparent 1.5px)",
+          backgroundSize: "20px 20px",
+        }}
+      >
+        <span className="mb-2 block text-xs font-semibold uppercase tracking-[2.5px] text-gold-600">
+          our impact.
+        </span>
+        <h2 className="font-display text-3xl font-bold text-navy-800">Action to Impact</h2>
+        <div className="mx-auto mt-10 grid max-w-4xl grid-cols-2 gap-8 md:grid-cols-3">
+          {[
+            { icon: HiOutlineAcademicCap, stat: heroStats?.[0] },
+            { icon: HiOutlineUserGroup, stat: heroStats?.[1] },
+            { icon: HiOutlineSparkles, stat: heroStats?.[2] },
+          ]
+            .filter((item): item is { icon: typeof HiOutlineAcademicCap; stat: { number: string; label: string } } =>
+              Boolean(item.stat)
+            )
+            .map(({ icon: Icon, stat }) => (
+              <div key={stat.label} className="flex flex-col items-center">
+                <Icon className="text-3xl text-gold-600" />
+                <div className="font-display mt-3 text-3xl font-bold text-navy-800">
+                  <AnimatedCounter value={stat.number} />
+                </div>
+                <p className="mt-1 max-w-[160px] text-sm leading-snug text-gray-600">
+                  {stat.label}
+                </p>
+              </div>
+            ))}
         </div>
       </AnimatedSection>
 
