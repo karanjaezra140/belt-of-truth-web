@@ -27,7 +27,7 @@ export function CTASection({
         <h2 className="font-display text-3xl font-bold">{title}</h2>
         <p className="mx-auto mt-3 max-w-xl text-white/85">{description}</p>
         <div className="mt-6 flex flex-wrap items-center justify-center gap-3">
-          <Button href={buttonHref}>{buttonLabel} →</Button>
+          <Button href={buttonHref}>{buttonLabel}</Button>
           {secondaryLabel && secondaryHref && (
             <Button href={secondaryHref} variant="outline">
               {secondaryLabel}

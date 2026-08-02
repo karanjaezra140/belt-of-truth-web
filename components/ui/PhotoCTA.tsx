@@ -48,7 +48,7 @@ export function PhotoCTA({
               {title}
             </h2>
           </div>
-          <Button href={buttonHref}>{buttonLabel} →</Button>
+          <Button href={buttonHref}>{buttonLabel}</Button>
         </div>
       </div>
     </div>

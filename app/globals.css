@@ -39,6 +39,15 @@ body {
   color: var(--foreground);
 }
 
+/* Native cursor is hidden only on devices with a real mouse — CustomCursor.tsx
+   renders its own highlight in exactly that case (see its [@media(pointer:fine)]
+   class). Touch and keyboard navigation are never affected. */
+@media (pointer: fine) {
+  body {
+    cursor: none;
+  }
+}
+
 @keyframes fade-up {
   from {
     opacity: 0;

@@ -82,9 +82,9 @@ export default async function HomePage() {
           </div>
 
           <div className="mt-11 flex flex-wrap gap-3.5">
-            <Button href="/contact">Join the Movement →</Button>
+            <Button href="/contact">Join the Movement</Button>
             <Button href="/resources" variant="outline">
-              Explore Resources →
+              Explore Resources
             </Button>
           </div>
         </div>
@@ -175,7 +175,7 @@ export default async function HomePage() {
             with integrity and impact.
           </p>
           <Button href="/about" className="mt-6">
-            Learn More About Us →
+            Learn More About Us
           </Button>
         </div>
       </AnimatedSection>
