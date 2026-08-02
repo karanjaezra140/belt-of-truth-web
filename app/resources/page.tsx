@@ -18,6 +18,10 @@ export const metadata: Metadata = {
     "Tools, guides, and books to support your journey toward truth, purity, and purpose — from Belt of Truth Mentorship.",
 };
 
+// Safety net for edits made directly in Sanity Studio — without this, a
+// static page only picks up Sanity changes on the next deploy.
+export const revalidate = 60;
+
 export default async function ResourcesPage() {
   const [books, freeResources] = await Promise.all([getBooks(), getFreeResources()]);
 

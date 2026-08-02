@@ -11,6 +11,10 @@ type Props = {
   params: Promise<{ slug: string }>;
 };
 
+// Safety net for edits made directly in Sanity Studio — without this, a
+// static page only picks up Sanity changes on the next deploy.
+export const revalidate = 60;
+
 export async function generateStaticParams() {
   const testimonies = await getTestimonies();
   return testimonies.map((testimony) => ({ slug: testimony.slug }));

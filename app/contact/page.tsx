@@ -14,6 +14,12 @@ export const metadata: Metadata = {
     "Reach out to Belt of Truth Mentorship to join our mentorship programs, volunteer, or partner with us.",
 };
 
+// Safety net for edits made directly in Sanity Studio (the admin panel's
+// site-media uploads also call revalidatePath directly for an instant
+// update) — without this, a static page only picks up Sanity changes on
+// the next deploy.
+export const revalidate = 60;
+
 export default async function ContactPage() {
   const { contactEmail, contactHeroPhoto, contactHeroVideo } = await getSiteSettings();
   const contactHeroPhotoUrl = contactHeroPhoto

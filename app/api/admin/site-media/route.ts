@@ -1,5 +1,6 @@
 import { randomUUID } from "node:crypto";
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAdminRequestAuthenticated } from "@/lib/admin-session";
 import { sanityWriteClient } from "@/lib/sanity/client";
 
@@ -71,6 +72,10 @@ export async function POST(request: Request) {
     }
 
     await patch.commit();
+    // These pages are statically prerendered — without this, the upload
+    // would succeed but not actually appear until the next deploy.
+    revalidatePath("/");
+    revalidatePath("/contact");
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("Failed to update site media:", err);

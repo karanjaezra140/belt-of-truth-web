@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAdminRequestAuthenticated } from "@/lib/admin-session";
 import { sanityWriteClient } from "@/lib/sanity/client";
 import { slugify } from "@/lib/slugify";
@@ -64,6 +65,9 @@ export async function POST(request: Request) {
       cover: { _type: "image", asset: { _type: "reference", _ref: coverAsset._id } },
     });
 
+    // /resources is statically prerendered — without this the new book
+    // wouldn't actually appear until the next deploy.
+    revalidatePath("/resources");
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("Failed to create book:", err);

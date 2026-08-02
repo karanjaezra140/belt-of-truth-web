@@ -14,6 +14,10 @@ export const metadata: Metadata = {
     "Belt of Truth Mentorship empowers youth to overcome destructive habits and live purposeful, Christ-centered lives through mentorship, accountability, and biblical truth.",
 };
 
+// Safety net for edits made directly in Sanity Studio — without this, a
+// static page only picks up Sanity changes on the next deploy.
+export const revalidate = 60;
+
 export default async function AboutPage() {
   const coreValues = await getCoreValues();
 

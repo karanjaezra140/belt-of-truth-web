@@ -1,4 +1,5 @@
 import { NextResponse } from "next/server";
+import { revalidatePath } from "next/cache";
 import { isAdminRequestAuthenticated } from "@/lib/admin-session";
 import { sanityWriteClient } from "@/lib/sanity/client";
 
@@ -42,6 +43,7 @@ export async function POST(request: Request, { params }: Props) {
       .set({ image: { _type: "image", asset: { _type: "reference", _ref: asset._id } } })
       .commit();
 
+    revalidatePath("/resources");
     return NextResponse.json({ ok: true });
   } catch (err) {
     console.error("Failed to update free resource photo:", err);

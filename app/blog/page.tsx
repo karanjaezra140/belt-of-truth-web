@@ -11,6 +11,10 @@ export const metadata: Metadata = {
     "Real stories of transformation from young people who have walked through Belt of Truth Mentorship programs.",
 };
 
+// Safety net for edits made directly in Sanity Studio — without this, a
+// static page only picks up Sanity changes on the next deploy.
+export const revalidate = 60;
+
 export default async function BlogPage() {
   const testimonies = await getTestimonies();
 

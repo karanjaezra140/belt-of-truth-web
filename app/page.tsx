@@ -16,6 +16,11 @@ import {
 import { getSiteSettings, getFocusAreas } from "@/lib/sanity/queries";
 import { urlFor } from "@/lib/sanity/image";
 
+// Safety net for edits made directly in Sanity Studio (bypassing the admin
+// panel's on-demand revalidatePath calls) — without this, a static page
+// only picks up Sanity changes on the next deploy.
+export const revalidate = 60;
+
 export default async function HomePage() {
   const [{ heroStats, heroImages, missionVisionPhoto, missionVisionVideo }, focusAreas] =
     await Promise.all([getSiteSettings(), getFocusAreas()]);
