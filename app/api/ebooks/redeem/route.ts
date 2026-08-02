@@ -4,7 +4,7 @@ import { getBookBySlug, getEbookAccessByTokenHash } from "@/lib/sanity/queries";
 import { ebookCookieName, isEbookAccessLive, signSession } from "@/lib/ebook-session";
 import { SITE_URL } from "@/lib/site-config";
 
-const SESSION_TTL_MS = 24 * 60 * 60 * 1000; // 24h, renewed on each redemption
+const SESSION_TTL_MS = 30 * 24 * 60 * 60 * 1000; // 30 days, renewed on each redemption
 
 // The link emailed after a book purchase points here. Cookies can only be
 // set from a Route Handler (or Server Action), not a plain Server Component

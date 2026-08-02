@@ -81,7 +81,10 @@ export async function POST(request: Request) {
         const rawToken = randomBytes(32).toString("base64url");
         const tokenHash = createHash("sha256").update(rawToken).digest("hex");
         const now = new Date();
-        const expiresAt = new Date(now.getTime() + 90 * 24 * 60 * 60 * 1000);
+        // Effectively permanent access — a purchase shouldn't expire. Using
+        // a far-future date instead of an optional/nullable field keeps the
+        // existing expiry comparisons (isEbookAccessLive, etc.) unchanged.
+        const expiresAt = new Date(now.getTime() + 100 * 365 * 24 * 60 * 60 * 1000);
 
         await sanityWriteClient.create({
           _type: "ebookAccess",
