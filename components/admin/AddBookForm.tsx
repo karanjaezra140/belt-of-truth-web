@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { resizeImageForUpload } from "@/lib/client-image-resize";
 
 export function AddBookForm() {
   const router = useRouter();
@@ -14,9 +15,14 @@ export function AddBookForm() {
     setStatus("submitting");
     setErrorMessage("");
     try {
+      const formData = new FormData(e.currentTarget);
+      const cover = formData.get("cover");
+      if (cover instanceof File && cover.size > 0) {
+        formData.set("cover", await resizeImageForUpload(cover));
+      }
       const res = await fetch("/api/admin/books", {
         method: "POST",
-        body: new FormData(e.currentTarget),
+        body: formData,
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Something went wrong.");

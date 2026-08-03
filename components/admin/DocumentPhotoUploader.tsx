@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { resizeImageForUpload } from "@/lib/client-image-resize";
 
 type DocumentPhotoUploaderProps = {
   documentId: string;
@@ -23,7 +24,7 @@ export function DocumentPhotoUploader({ documentId, title, kind }: DocumentPhoto
     setStatus("uploading");
     try {
       const formData = new FormData();
-      formData.append("photo", file);
+      formData.append("photo", await resizeImageForUpload(file));
       const res = await fetch(`/api/admin/${kind}/${documentId}/photo`, {
         method: "POST",
         body: formData,

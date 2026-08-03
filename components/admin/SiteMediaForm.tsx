@@ -2,6 +2,7 @@
 
 import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { resizeImageForUpload } from "@/lib/client-image-resize";
 
 type FieldKey = "heroImage" | "missionVisionPhoto" | "contactHeroPhoto";
 
@@ -40,7 +41,7 @@ export function SiteMediaForm() {
     setMessage(null);
     try {
       const formData = new FormData();
-      formData.append(field, file);
+      formData.append(field, await resizeImageForUpload(file));
       const res = await fetch("/api/admin/site-media", { method: "POST", body: formData });
       const data = await res.json();
       if (!res.ok) throw new Error(data?.error ?? "Something went wrong.");
