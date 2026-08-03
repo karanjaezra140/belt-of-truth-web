@@ -34,7 +34,7 @@ export default async function ResourcesPage() {
 
       <AnimatedSection className="mx-auto max-w-6xl px-5 py-16">
         <SectionHeading eyebrow="at no cost." title="Free Resources" />
-        <div className="mt-8 grid grid-cols-1 gap-4 md:grid-cols-3">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-3">
           {freeResources.map((resource) => {
             const photoUrl = resource.image
               ? urlFor(resource.image)?.width(500).height(400).fit("crop").url()

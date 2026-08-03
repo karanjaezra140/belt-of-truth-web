@@ -153,7 +153,7 @@ export default async function HomePage() {
         <h2 className="font-display text-3xl font-bold text-navy-800">
           Our Focus Areas
         </h2>
-        <div className="mt-8 grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-4">
+        <div className="mt-8 grid grid-cols-2 gap-3 sm:gap-4 md:grid-cols-4">
           {focusAreas.map((area) => {
             const photoUrl = area.image
               ? urlFor(area.image)?.width(500).height(650).fit("crop").url()
