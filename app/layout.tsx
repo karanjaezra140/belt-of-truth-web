@@ -1,8 +1,5 @@
 import type { Metadata } from "next";
 import { Barlow, PT_Serif } from "next/font/google";
-import { Navbar } from "@/components/Navbar";
-import { Footer } from "@/components/Footer";
-import { CustomCursor } from "@/components/CustomCursor";
 import { SITE_NAME, SITE_URL } from "@/lib/site-config";
 import "./globals.css";
 
@@ -50,12 +47,7 @@ export default function RootLayout({
       lang="en"
       className={`${ptSerif.variable} ${barlow.variable} h-full antialiased`}
     >
-      <body className="flex min-h-full flex-col font-sans">
-        <CustomCursor />
-        <Navbar />
-        <main className="flex-1">{children}</main>
-        <Footer />
-      </body>
+      <body className="flex min-h-full flex-col font-sans">{children}</body>
     </html>
   );
 }
