@@ -1,3 +1,6 @@
+// (mpesa-till-test branch: this comment only exists to give this branch a
+// diff against main so a throwaway PR can be opened for a Vercel preview
+// build — safe to ignore, this branch is never meant to be merged as-is.)
 const MPESA_ENV = process.env.MPESA_ENV === "production" ? "production" : "sandbox";
 const BASE_URL =
   MPESA_ENV === "production"
