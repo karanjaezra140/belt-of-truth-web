@@ -49,6 +49,15 @@ Until these are set, the contact form will show a friendly "not configured yet" 
 3. In the same settings page, add a webhook pointing to `https://<your-domain>/api/paystack/webhook` (Paystack requires HTTPS, so this only works once deployed, or via a tunnel like `ngrok` locally).
 4. Test with [Paystack's test cards](https://paystack.com/docs/payments/test-payments/) or the M-Pesa test flow before switching to live keys.
 
+### 4. M-Pesa Till (optional second payment option — hidden by default)
+
+A direct Safaricom Daraja integration for a Till (Buy Goods) number, as an alternative to Paystack's own M-Pesa channel. It's fully built but **stays hidden from the donate and book-purchase forms until you explicitly turn it on** — useful for testing against Safaricom's sandbox without it ever showing on the live site.
+
+1. Create an app at [developer.safaricom.co.ke](https://developer.safaricom.co.ke), add the "Lipa Na M-Pesa Online" (STK Push) product, and copy the sandbox Consumer Key/Secret, test Till number, and passkey into `MPESA_CONSUMER_KEY` / `MPESA_CONSUMER_SECRET` / `MPESA_TILL_NUMBER` / `MPESA_PASSKEY`.
+2. Register `https://<your-domain>/api/mpesa/callback` as the app's callback URL (also requires HTTPS, so a tunnel like `ngrok` is needed to test locally).
+3. Test end-to-end with Safaricom's published sandbox test phone number and PIN.
+4. When you're ready to show it as a payment option — after switching `MPESA_ENV` to `production` and swapping in your real Till's credentials — set `NEXT_PUBLIC_MPESA_TILL_ENABLED=true`.
+
 ## Deployment
 
 Built for [Vercel](https://vercel.com/new): connect the repo, add the environment variables from `.env.local.example` in the Vercel project settings, and set `NEXT_PUBLIC_SITE_URL` to your production domain (needed for correct Open Graph tags, sitemap, and Paystack callback URLs).

@@ -6,10 +6,11 @@ import {
 } from "react-icons/hi";
 
 // Plain-language, grouped navigation for non-technical editors. "Ebook Page"
-// (the auto-generated page-render cache — see lib/ebook-render.ts) is
-// deliberately left out of every group below: it's never meant to be opened
-// by a human, so it's simplest to just not show it rather than explain why
-// it exists every time someone looks at the sidebar.
+// (the auto-generated page-render cache — see lib/ebook-render.ts) and
+// "M-Pesa Transaction" (internal STK push bookkeeping — see lib/mpesa.ts)
+// are deliberately left out of every group below: neither is ever meant to
+// be opened by a human, so it's simplest to just not show them rather than
+// explain why they exist every time someone looks at the sidebar.
 export const structure: StructureResolver = (S) =>
   S.list()
     .title("Belt of Truth Admin")
