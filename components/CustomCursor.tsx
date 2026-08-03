@@ -36,10 +36,17 @@ export function CustomCursor() {
   return (
     <motion.div
       aria-hidden
-      className="pointer-events-none fixed left-0 top-0 z-[9999] hidden rounded-full mix-blend-difference bg-gold-500 [@media(pointer:fine)]:block"
+      // The white ring is the guaranteed-visible layer — mix-blend-mode is
+      // unreliable over images/video (they're commonly GPU-composited on
+      // their own layer, e.g. via EffectImage's hover-scale transform, which
+      // can stop the blend from applying against them at all). The gold
+      // blend fill on top is a decorative bonus where blending does work.
+      className="pointer-events-none fixed left-0 top-0 z-[9999] hidden rounded-full shadow-[0_0_0_1.5px_rgba(255,255,255,0.9),0_0_10px_rgba(0,0,0,0.35)] [@media(pointer:fine)]:block"
       style={{ x: springX, y: springY, translateX: "-50%", translateY: "-50%" }}
       animate={{ width: hovering ? 56 : 18, height: hovering ? 56 : 18 }}
       transition={{ duration: 0.25, ease: "easeOut" }}
-    />
+    >
+      <div className="h-full w-full rounded-full mix-blend-difference bg-gold-500" />
+    </motion.div>
   );
 }
