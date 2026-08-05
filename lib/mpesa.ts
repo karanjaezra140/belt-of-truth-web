@@ -1,3 +1,6 @@
+// (mpesa-till-test branch: this comment only exists to give this branch a
+// diff against main so a throwaway PR can be opened for a Vercel preview
+// build — safe to ignore, this branch is never meant to be merged as-is.)
 const MPESA_ENV = process.env.MPESA_ENV === "production" ? "production" : "sandbox";
 const BASE_URL =
   MPESA_ENV === "production"
@@ -101,7 +104,11 @@ export async function initiateStkPush({
       BusinessShortCode: shortCode,
       Password: password,
       Timestamp: timestamp,
-      TransactionType: "CustomerBuyGoodsOnline",
+      // Real Till numbers need "CustomerBuyGoodsOnline". Safaricom's public
+      // sandbox test shortcode (174379) is provisioned as a PayBill on their
+      // end, though, and rejects that with "Invalid TransactionType" — set
+      // MPESA_TRANSACTION_TYPE=CustomerPayBillOnline when testing against it.
+      TransactionType: process.env.MPESA_TRANSACTION_TYPE || "CustomerBuyGoodsOnline",
       Amount: Math.round(amountKes),
       PartyA: phone,
       PartyB: shortCode,
