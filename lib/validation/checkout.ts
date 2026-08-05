@@ -1,7 +1,7 @@
 import { z } from "zod";
 
 export const donationSchema = z.object({
-  amountKes: z.number().int().min(50, "Minimum donation is KSh 50"),
+  amountKes: z.number().int().min(1, "Enter an amount greater than 0"),
   donorName: z.string().trim().min(2, "Please enter your name").max(120),
   donorEmail: z.email("Please enter a valid email address"),
 });

@@ -135,7 +135,7 @@ export function DonateForm() {
         <input
           id="amountKes"
           type="number"
-          min={50}
+          min={1}
           step={1}
           className={inputClasses}
           {...register("amountKes", {
