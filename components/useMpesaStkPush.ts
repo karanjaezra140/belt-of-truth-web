@@ -14,11 +14,16 @@ export function useMpesaStkPush() {
   const [status, setStatus] = useState<MpesaStatus>("idle");
   const [errorMessage, setErrorMessage] = useState("");
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  const visibilityCleanupRef = useRef<(() => void) | null>(null);
 
   const stopPolling = useCallback(() => {
     if (pollRef.current) {
       clearInterval(pollRef.current);
       pollRef.current = null;
+    }
+    if (visibilityCleanupRef.current) {
+      visibilityCleanupRef.current();
+      visibilityCleanupRef.current = null;
     }
   }, []);
 
@@ -41,7 +46,7 @@ export function useMpesaStkPush() {
         const checkoutRequestId = data.checkoutRequestId as string;
         const startedAt = Date.now();
 
-        pollRef.current = setInterval(async () => {
+        const checkOnce = async () => {
           if (Date.now() - startedAt > TIMEOUT_MS) {
             stopPolling();
             setStatus("failed");
@@ -64,7 +69,24 @@ export function useMpesaStkPush() {
           } catch {
             // Transient network hiccup while polling — keep trying until timeout.
           }
-        }, POLL_INTERVAL_MS);
+        };
+
+        pollRef.current = setInterval(checkOnce, POLL_INTERVAL_MS);
+
+        // Background tabs get their timers throttled by the browser (often
+        // to 30s+), but that's exactly when this matters most — the phone's
+        // M-Pesa app is what has focus while the PIN gets entered. Check
+        // immediately the moment the tab regains focus/visibility instead of
+        // waiting for the next throttled interval tick.
+        const onVisible = () => {
+          if (document.visibilityState === "visible") checkOnce();
+        };
+        document.addEventListener("visibilitychange", onVisible);
+        window.addEventListener("focus", checkOnce);
+        visibilityCleanupRef.current = () => {
+          document.removeEventListener("visibilitychange", onVisible);
+          window.removeEventListener("focus", checkOnce);
+        };
       } catch (err) {
         setStatus("error");
         setErrorMessage(err instanceof Error ? err.message : "Something went wrong.");
