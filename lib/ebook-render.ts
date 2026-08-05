@@ -1,5 +1,14 @@
 import { createCanvas } from "@napi-rs/canvas";
 import { getDocument } from "pdfjs-dist/legacy/build/pdf.mjs";
+// pdfjs-dist loads its worker via a dynamic import tagged `webpackIgnore`/
+// `vite-ignore` internally (correct for browsers, which fetch it as a real
+// URL) — but that same tag makes Vercel's serverless file-tracer skip the
+// file too, so it's silently missing from the deployed function and
+// rendering fails with "Cannot find module .../pdf.worker.mjs" in
+// production despite working fine locally. This plain static import isn't
+// tagged, so the tracer picks it up; pdfjs's own runtime import of the same
+// path then just resolves from Node's module cache.
+import "pdfjs-dist/legacy/build/pdf.worker.mjs";
 import sharp from "sharp";
 
 // Rasterizes one page of a PDF to a plain PNG buffer. Called at most once
