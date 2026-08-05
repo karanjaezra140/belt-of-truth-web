@@ -101,7 +101,11 @@ export async function initiateStkPush({
       BusinessShortCode: shortCode,
       Password: password,
       Timestamp: timestamp,
-      TransactionType: "CustomerBuyGoodsOnline",
+      // Real Till numbers need "CustomerBuyGoodsOnline". Safaricom's public
+      // sandbox test shortcode (174379) is provisioned as a PayBill on their
+      // end, though, and rejects that with "Invalid TransactionType" — set
+      // MPESA_TRANSACTION_TYPE=CustomerPayBillOnline when testing against it.
+      TransactionType: process.env.MPESA_TRANSACTION_TYPE || "CustomerBuyGoodsOnline",
       Amount: Math.round(amountKes),
       PartyA: phone,
       PartyB: shortCode,
